@@ -1,7 +1,5 @@
 package fr.agaspardcilia.homeadmin.user;
 
-import fr.agaspardcilia.homeadmin.user.entity.User;
-
 import java.util.UUID;
 
 /**
@@ -14,16 +12,6 @@ import java.util.UUID;
 public record UserDto (
         UUID id,
         String mail,
-        Boolean isActive
-) {
-    /**
-     * TODO: test me!
-     * Creates a new instance from a given {@link User}.
-     *
-     * @param user the user.
-     * @return the new instance.
-     */
-    public static UserDto from(User user) {
-        return new UserDto(user.getId(), user.getMail(), user.getIsActive());
-    }
-}
+        Boolean isActive,
+        Boolean isAdmin
+) { }

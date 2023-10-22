@@ -57,7 +57,6 @@ public class TokenProvider {
     }
 
     /**
-     * TODO: test me!
      * Creates a JWT token from a user authentication details.
      *
      * @param user the user to authenticate.
@@ -80,7 +79,6 @@ public class TokenProvider {
     }
 
     /**
-     * TODO: test me!
      * Get an authentication from a given JWT token.
      *
      * @param token the token.

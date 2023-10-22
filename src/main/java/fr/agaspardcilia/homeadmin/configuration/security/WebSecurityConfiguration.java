@@ -1,6 +1,5 @@
 package fr.agaspardcilia.homeadmin.configuration.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.agaspardcilia.homeadmin.authentication.TokenProvider;
 import fr.agaspardcilia.homeadmin.security.Authority;
 import lombok.AllArgsConstructor;
@@ -31,11 +30,10 @@ public class WebSecurityConfiguration {
     private final TokenProvider tokenProvider;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.apply(new JwtConfigurer(tokenProvider, objectMapper));
+        httpSecurity.apply(new JwtConfigurer(tokenProvider));
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
@@ -49,6 +47,8 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/users/forgotten/*").permitAll()
                         .requestMatchers("/users/reset").permitAll()
                         .requestMatchers("/users/current").permitAll()
+                        .requestMatchers("/articles/available").permitAll()
+                        .requestMatchers("/articles/category/*").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority(Authority.ADMIN.name())
                         .anyRequest().authenticated()
                 ).build();

@@ -37,7 +37,7 @@ public class UserService {
      */
     public Optional<UserDto> get(UUID id) {
         return userRepository.findById(id)
-                .map(UserDto::from);
+                .map(UserMapper::from);
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserService {
      */
     public Optional<UserDto> get(String mail) {
         return userRepository.findByMail(mail)
-                .map(UserDto::from);
+                .map(UserMapper::from);
     }
 
 
@@ -85,7 +85,7 @@ public class UserService {
         LOGGER.debug("Registering {} with {} as his activation key", savedUser.getMail(), activationToken);
         sendUserRegistrationMail(savedUser, activationToken);
 
-        return UserDto.from(savedUser);
+        return UserMapper.from(savedUser);
     }
 
     /**

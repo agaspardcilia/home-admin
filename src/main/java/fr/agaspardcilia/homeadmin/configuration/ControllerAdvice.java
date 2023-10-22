@@ -21,7 +21,6 @@ public class ControllerAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAdvice.class);
 
     /**
-     * TODO: test me!
      * Handle API exceptions.
      *
      * @param exception the exception.
@@ -37,7 +36,6 @@ public class ControllerAdvice {
     }
 
     /**
-     * TODO: test me!
      * Handle validation exceptions.
      *
      * @param exception the exception.

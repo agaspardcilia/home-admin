@@ -3,6 +3,7 @@ package fr.agaspardcilia.homeadmin.user;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import fr.agaspardcilia.homeadmin.mail.MailDto;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
  * A factory producing various mails.
  */
 @AllArgsConstructor
+@Component
 class MailFactory {
     private final AppProperties properties;
 

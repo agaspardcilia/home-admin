@@ -9,7 +9,12 @@ import java.util.Set;
  */
 @Getter
 public enum Authority {
-    ADMIN(Permission.USERS_GET, Permission.USERS_REGISTER, Permission.USERS_CHANGE_PWD, Permission.USERS_GET_ALL),
+    ADMIN(
+            // Users
+            Permission.USERS_GET, Permission.USERS_REGISTER, Permission.USERS_CHANGE_PWD, Permission.USERS_GET_ALL,
+            // Articles
+            Permission.FETCH_ADMIN_ONLY_ARTICLE
+    ),
     USER(),
     ROLE_ANONYMOUS();
 
