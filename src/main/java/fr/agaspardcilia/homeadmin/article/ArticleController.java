@@ -31,7 +31,7 @@ public class ArticleController {
         }
     }
 
-    @PermissionRequired(Permission.UPDATE_ARTICLE)
+    @PermissionRequired(Permission.ARTICLES_UPDATE)
     @PostMapping("/category/{category}")
     public ArticleDto updateArticle(@PathVariable ArticleCategory category, @Valid @RequestBody ArticleUpdateDto updateDto) {
         return service.updateArticle(category, updateDto);

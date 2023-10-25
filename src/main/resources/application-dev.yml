@@ -23,3 +23,7 @@ app:
       # Token is valid 24 hours
       token-validity-in-seconds: 86400
       token-validity-in-seconds-for-remember-me: 2592000
+  action:
+    runnable-dir: /Users/alexandre/home-admin
+    execution-timeout: PT60S
+

@@ -9,4 +9,5 @@ public class AppProperties {
     private String frontUrl;
     private Mail mail;
     private Security security;
+    private Action action;
 }

@@ -13,7 +13,7 @@ public enum Authority {
             // Users
             Permission.USERS_GET, Permission.USERS_REGISTER, Permission.USERS_CHANGE_PWD, Permission.USERS_GET_ALL,
             // Articles
-            Permission.FETCH_ADMIN_ONLY_ARTICLE
+            Permission.ARTICLES_FETCH_ADMIN_ONLY
     ),
     USER(),
     ROLE_ANONYMOUS();

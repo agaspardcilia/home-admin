@@ -72,7 +72,7 @@ public class ArticleService {
     }
 
     private boolean canCurrentUserAccessAdminArticles() {
-        return AuthenticationUtil.getCurrentUserPermissions().contains(Permission.FETCH_ADMIN_ONLY_ARTICLE);
+        return AuthenticationUtil.getCurrentUserPermissions().contains(Permission.ARTICLES_FETCH_ADMIN_ONLY);
     }
 
 

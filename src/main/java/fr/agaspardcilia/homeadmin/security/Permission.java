@@ -10,6 +10,11 @@ public enum Permission {
     USERS_CHANGE_PWD,
 
     // Articles
-    FETCH_ADMIN_ONLY_ARTICLE,
-    UPDATE_ARTICLE,
+    ARTICLES_FETCH_ADMIN_ONLY,
+    ARTICLES_UPDATE,
+
+    //Actions
+    ACTIONS_SCAN_DIRECTORY,
+    ACTIONS_GET,
+    ACTIONS_RUN,
 }
