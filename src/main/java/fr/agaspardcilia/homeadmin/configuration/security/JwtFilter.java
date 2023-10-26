@@ -28,14 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(token));
             } catch (InvalidTokenException e) {
-                // TODO: not sure if it's the right thing to do.
                 SecurityContextHolder.clearContext();
             }
         }
         filterChain.doFilter(request, response);
     }
 
-    // TODO: test me!
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {

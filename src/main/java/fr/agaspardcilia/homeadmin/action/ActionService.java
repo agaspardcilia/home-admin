@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import fr.agaspardcilia.homeadmin.action.dto.ActionDto;
 import fr.agaspardcilia.homeadmin.action.dto.ActionExecutionDto;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -48,12 +49,11 @@ public class ActionService {
 
 
     /**
-     * TODO: test me!
-     * TODO: should be transactional
      * Scans the runnable directory for new actions and update the existence status of existing ones.
      *
      * @throws UnableToAccessPathException when the runnable directory is not accessible.
      */
+    @Transactional
     public Set<ActionDto> scanRunnableDirectory() throws UnableToAccessPathException {
         try {
             // All entries in database.
@@ -81,7 +81,6 @@ public class ActionService {
     }
 
     /**
-     * TODO: test me!
      * @return all the actions in database.
      */
     public Set<ActionDto> getAll() {

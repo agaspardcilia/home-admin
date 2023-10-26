@@ -10,7 +10,6 @@ public class ActionFactory {
 
     /**
      * Creates a minimal action from a runnable.
-     * TODO: test me!
      *
      * @param runnable the runnable.
      * @return the action.

@@ -12,7 +12,6 @@ public class ActionMapper {
 
     /**
      * Converts an action to a DTO.
-     * TODO: test me!
      *
      * @param action the action to convert.
      * @return the DTO.

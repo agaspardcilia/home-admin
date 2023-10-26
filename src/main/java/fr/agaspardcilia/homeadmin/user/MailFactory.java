@@ -16,7 +16,6 @@ class MailFactory {
     private final AppProperties properties;
 
     /**
-     * TODO: test me!
      * Creates a registration activation code mail.
      *
      * @param to the destination.

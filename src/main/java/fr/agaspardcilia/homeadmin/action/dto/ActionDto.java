@@ -1,6 +1,7 @@
 package fr.agaspardcilia.homeadmin.action.dto;
 
 import fr.agaspardcilia.homeadmin.action.Action;
+import lombok.Builder;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import java.util.UUID;
  * @param creationDate the creation date of the entity.
  * @param updateDate the last update date of the entity.
  */
+@Builder
 public record ActionDto(
         UUID id,
         String name,
