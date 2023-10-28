@@ -1,8 +1,8 @@
 package fr.agaspardcilia.homeadmin.authentication;
 
 import fr.agaspardcilia.homeadmin.authentication.exception.UserNotActivatedException;
-import fr.agaspardcilia.homeadmin.common.exception.ApiForbiddenException;
-import fr.agaspardcilia.homeadmin.common.exception.ApiNotFoundException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiForbiddenException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiNotFoundException;
 import fr.agaspardcilia.homeadmin.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

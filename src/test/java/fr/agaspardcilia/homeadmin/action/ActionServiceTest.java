@@ -1,6 +1,7 @@
 package fr.agaspardcilia.homeadmin.action;
 
 import fr.agaspardcilia.homeadmin.action.dto.ActionDto;
+import fr.agaspardcilia.homeadmin.action.exception.UnableToAccessPathException;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

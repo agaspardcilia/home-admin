@@ -2,8 +2,8 @@ package fr.agaspardcilia.homeadmin.configuration.security;
 
 import fr.agaspardcilia.homeadmin.common.annotation.PermissionRequired;
 import fr.agaspardcilia.homeadmin.common.annotation.PermitAll;
-import fr.agaspardcilia.homeadmin.common.exception.ApiForbiddenException;
-import fr.agaspardcilia.homeadmin.common.exception.ApiInternalServerErrorException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiForbiddenException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiInternalServerErrorException;
 import fr.agaspardcilia.homeadmin.security.Authority;
 import fr.agaspardcilia.homeadmin.security.Permission;
 import jakarta.servlet.http.HttpServletRequest;

@@ -2,8 +2,8 @@ package fr.agaspardcilia.homeadmin.user;
 
 import fr.agaspardcilia.homeadmin.common.annotation.PermissionRequired;
 import fr.agaspardcilia.homeadmin.common.annotation.PermitAll;
-import fr.agaspardcilia.homeadmin.common.exception.ApiForbiddenException;
-import fr.agaspardcilia.homeadmin.common.exception.ApiNotFoundException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiForbiddenException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiNotFoundException;
 import fr.agaspardcilia.homeadmin.security.Permission;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

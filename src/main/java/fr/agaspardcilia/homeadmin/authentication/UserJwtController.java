@@ -5,7 +5,7 @@ import fr.agaspardcilia.homeadmin.authentication.dto.JwtTokenResponse;
 import fr.agaspardcilia.homeadmin.authentication.exception.InvalidCredentialException;
 import fr.agaspardcilia.homeadmin.authentication.exception.UserNotActivatedException;
 import fr.agaspardcilia.homeadmin.common.annotation.PermitAll;
-import fr.agaspardcilia.homeadmin.common.exception.ApiForbiddenException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiForbiddenException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;

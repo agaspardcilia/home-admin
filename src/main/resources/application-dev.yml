@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/money_tracker
+    url: jdbc:postgresql://localhost:5432/home_admin
     username: postgres
     password: postgres
     hikari:
@@ -19,7 +19,7 @@ app:
     url: http://localhost:8080
   security:
     jwt:
-      secret: M2Y4N2YxNmY0Y2E3NDQ2ZmQxOWExM2U1MDhmYTUxODI4MmE4NWNmNWVkZTRhNGUwNzczYjBkZDA5ZDAyZjE2NjVlNDUwZTEyNjViYmFkZDQ5YzkwNGVmMzc2NTRiMDgyODdhYmY4Y2Q0YmM4NGRiNzJlMWZiYjM4ZDZjOTI5Mzg=
+      secret: 2FYATHOHmedvL6z57EGuYeVb3Z3lrusDesFuD3YFWK5v4UrhvlHLZKIZlmT16gvWPKNy287XPiFz7okIx3MOPOapKyCtPlTXYY53lQwqQLKX4MVoxNdtH7PL1VYz12
       # Token is valid 24 hours
       token-validity-in-seconds: 86400
       token-validity-in-seconds-for-remember-me: 2592000

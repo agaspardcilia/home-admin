@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+set -x
+
+mvn clean
+mvn package
+
+#linux/amd64
+docker build --platform linux/amd64 --build-arg JAR_FILE=target/*.jar -t agaspard/home-admin-amd64 .
+
+#linux/arm32
+docker build --platform linux/arm --build-arg JAR_FILE=target/*.jar -t agaspard/home-admin-arm32 .

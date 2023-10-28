@@ -1,4 +1,4 @@
-package fr.agaspardcilia.homeadmin.action;
+package fr.agaspardcilia.homeadmin.action.exception;
 
 /**
  * Throw when a path cannot be accessed.

@@ -1,6 +1,7 @@
 package fr.agaspardcilia.homeadmin.configuration;
 
-import fr.agaspardcilia.homeadmin.common.exception.ApiException;
+import fr.agaspardcilia.homeadmin.common.exception.UnknownEntityException;
+import fr.agaspardcilia.homeadmin.common.exception.api.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,18 @@ public class ControllerAdvice {
                 .map(e -> "'%s': %s".formatted(((FieldError)e).getField(), e.getDefaultMessage()))
                 .collect(Collectors.joining("/n"));
         return new ResponseEntity<>(new ApiExceptionResponse(HttpStatus.BAD_REQUEST, errorMessage), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * TODO: comment me!
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler
+    public ResponseEntity<ApiExceptionResponse> handleUnknownEntityException(UnknownEntityException exception) {
+        return new ResponseEntity<>(
+                new ApiExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage()), HttpStatus.NOT_FOUND
+        );
     }
 
     private record ApiExceptionResponse(

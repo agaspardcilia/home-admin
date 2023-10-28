@@ -3,8 +3,12 @@ package fr.agaspardcilia.homeadmin.action;
 import com.google.common.base.Preconditions;
 import fr.agaspardcilia.homeadmin.action.dto.ActionDto;
 import fr.agaspardcilia.homeadmin.action.dto.ActionExecutionDto;
+import fr.agaspardcilia.homeadmin.action.exception.DuplicatedActionException;
+import fr.agaspardcilia.homeadmin.action.exception.UnableToAccessPathException;
+import fr.agaspardcilia.homeadmin.common.exception.UnknownEntityException;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Pattern;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +28,7 @@ import java.util.stream.Stream;
 @Log4j2
 @Service
 public class ActionService {
-    private static final Set<String> FILE_BLACK_LIST = Set.of(".DS_Store");
+    private static final Set<String> FILE_BLACK_LIST = Set.of(".DS_Store", ".gitignore", ".gitkeep");
     private final Path runnableDir;
     private final Duration timeout;
     private final ActionRepository repository;
@@ -43,7 +47,7 @@ public class ActionService {
 
         Preconditions.checkArgument(
                 runnableDir.toFile().exists() && runnableDir.toFile().isDirectory(),
-                "scriptDir is not a valid directory"
+                "runnableDir is not a valid directory"
         );
     }
 
@@ -90,16 +94,21 @@ public class ActionService {
     }
 
     /**
+     * TODO: comment me! with exceptions
      * TODO: test me!
-     * TODO: should validate action name! (make sure it's unique)
-     * TODO: add controller method.
      *
      * @param id the id of the action.
      * @param name the new name of the action.
      * @return the updated action.
      */
-    public ActionDto renameAction(UUID id, String name) throws UnknownActionException {
+    public ActionDto renameAction(UUID id,
+                                  @Pattern(message = "Alphanumeric only", regexp = "\\w+") String name
+    ) throws UnknownEntityException, DuplicatedActionException {
         Action action = getEntity(id);
+        if (repository.existsByIdNotAndName(action.getId(), name)) {
+            throw new DuplicatedActionException("Name already in use by another action");
+        }
+
         action.setName(name);
         return ActionMapper.toDto(repository.save(action));
     }
@@ -109,17 +118,17 @@ public class ActionService {
      *
      * @param id the ID of the action to execute.
      * @return the execution result.
-     * @throws UnknownActionException of the action cannot be found in database.
+     * @throws UnknownEntityException of the action cannot be found in database.
      */
-    public ActionExecutionDto run(UUID id) throws UnknownActionException {
+    public ActionExecutionDto run(UUID id) throws UnknownEntityException {
         Action action = getEntity(id);
         ActionRunner runner = new ActionRunner(action.getRunnableFileName(), runnableDir, timeout);
         return runner.run();
     }
 
-    private Action getEntity(UUID id) throws UnknownActionException {
+    private Action getEntity(UUID id) throws UnknownEntityException {
         return repository.findById(id)
-                .orElseThrow(() -> new UnknownActionException("Unable to find action"));
+                .orElseThrow(() -> new UnknownEntityException("Unable to find action with specified ID"));
     }
 
     private Set<String> findAllInRunnableDir() throws IOException {

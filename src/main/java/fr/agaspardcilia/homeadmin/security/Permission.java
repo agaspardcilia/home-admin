@@ -17,4 +17,5 @@ public enum Permission {
     ACTIONS_SCAN_DIRECTORY,
     ACTIONS_GET,
     ACTIONS_RUN,
+    ACTIONS_RENAME
 }

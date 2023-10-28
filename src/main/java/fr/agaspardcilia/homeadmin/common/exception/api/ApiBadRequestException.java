@@ -1,4 +1,4 @@
-package fr.agaspardcilia.homeadmin.common.exception;
+package fr.agaspardcilia.homeadmin.common.exception.api;
 
 import org.springframework.http.HttpStatus;
 
