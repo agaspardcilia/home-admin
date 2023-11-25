@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Front ###
+/src/main/front/build/
+/src/main/front/node_modules/

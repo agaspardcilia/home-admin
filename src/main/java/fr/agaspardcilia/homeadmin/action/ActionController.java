@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/actions")
+@RequestMapping("/api/actions")
 public class ActionController {
     private final ActionService service;
 

@@ -2,7 +2,6 @@ package fr.agaspardcilia.homeadmin.configuration;
 
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +16,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
+
 /**
  * Configures the entire web, I know, powerful.
  */
@@ -29,7 +30,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     private final AppProperties properties;
 
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
         String profiles = String.join(",", environment.getActiveProfiles());
         if (!StringUtils.isBlank(profiles)) {
             LOGGER.info("Web application configuration, using profiles: {}", profiles);
@@ -38,6 +39,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 
     @Override
     public void customize(WebServerFactory factory) {
+        // Unused.
     }
 
     @Bean
@@ -45,9 +47,13 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = properties.getSecurity().getCors();
 
-        if (configuration.getAllowedOriginPatterns() != null && !configuration.getAllowedOriginPatterns().isEmpty()) {
+        List<String> allowedOriginPatterns = configuration.getAllowedOriginPatterns();
+        if (allowedOriginPatterns != null && !allowedOriginPatterns.isEmpty()) {
             LOGGER.info("Registering CORS filters");
+            LOGGER.info("allowed-origin-patterns: {}", allowedOriginPatterns);
             source.registerCorsConfiguration("/**", configuration);
+        } else {
+            LOGGER.warn("No CORS is being registered");
         }
 
         return new CorsFilter(source);

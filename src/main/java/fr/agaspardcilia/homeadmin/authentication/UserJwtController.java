@@ -30,7 +30,7 @@ public class UserJwtController {
      * @return the JWT token if it succeeds.
      * @throws ApiForbiddenException if it fails.
      */
-    @PostMapping("/authenticate")
+    @PostMapping("/api/authenticate")
     @PermitAll
     public ResponseEntity<JwtTokenResponse> authenticate(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
         try {

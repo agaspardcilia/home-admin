@@ -13,7 +13,9 @@ public enum Authority {
             // Users
             Permission.USERS_GET, Permission.USERS_REGISTER, Permission.USERS_CHANGE_PWD, Permission.USERS_GET_ALL,
             // Articles
-            Permission.ARTICLES_FETCH_ADMIN_ONLY
+            Permission.ARTICLES_FETCH_ADMIN_ONLY,
+            //Actions
+            Permission.ACTIONS_SCAN_DIRECTORY, Permission.ACTIONS_RUN, Permission.ACTIONS_RENAME, Permission.ACTIONS_GET
     ),
     USER(),
     ROLE_ANONYMOUS();

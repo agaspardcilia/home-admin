@@ -4,16 +4,16 @@ spring:
     name: authentication-service
   flyway:
     locations: classpath:db/migration
-server:
-  servlet:
-    context-path: /api
+  web:
+    resources:
+      static-locations: classpath:/static/
 
 app:
   mail:
     mail-address: <noreply@local.fr>
   security:
     cors:
-      allowed-origin-patterns: '*'
+      allowed-origin-patterns: 'http://localhost:3000'
       allowed-methods: '*'
       allowed-headers: '*'
       exposed-headers: 'Authorization,Link,X-Total-Count'

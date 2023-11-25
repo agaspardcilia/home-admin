@@ -1,6 +1,7 @@
-package fr.agaspardcilia.homeadmin.configuration.security;
+package fr.agaspardcilia.homeadmin.configuration;
 
 import fr.agaspardcilia.homeadmin.authentication.TokenProvider;
+import fr.agaspardcilia.homeadmin.configuration.security.JwtFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * A security adapter adding a JWT filter for authentication.
  */
 @AllArgsConstructor
-public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class FilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     private final TokenProvider tokenProvider;
 
     @Override

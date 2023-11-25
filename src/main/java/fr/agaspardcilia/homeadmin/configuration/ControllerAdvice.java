@@ -2,24 +2,23 @@ package fr.agaspardcilia.homeadmin.configuration;
 
 import fr.agaspardcilia.homeadmin.common.exception.UnknownEntityException;
 import fr.agaspardcilia.homeadmin.common.exception.api.ApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Instant;
 import java.util.stream.Collectors;
 
 /**
  * Application controller advice. Will intercept exception and convert them to HTTP error responses.
  */
 @RestControllerAdvice
+@Log4j2
 public class ControllerAdvice {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerAdvice.class);
 
     /**
      * Handle API exceptions.
@@ -29,7 +28,7 @@ public class ControllerAdvice {
      */
     @ExceptionHandler
     public ResponseEntity<ApiExceptionResponse> handleApiException(ApiException exception) {
-        LOGGER.debug("{}: {}", exception.getStatus(), exception.getMessage());
+        log.debug("{}: {}", exception.getStatus(), exception.getMessage());
 
         return new ResponseEntity<>(
                 new ApiExceptionResponse(exception.getStatus(), exception.getMessage()), exception.getStatus()
@@ -51,9 +50,10 @@ public class ControllerAdvice {
     }
 
     /**
-     * TODO: comment me!
-     * @param exception
-     * @return
+     * Handles unknown entity exceptions.
+     *
+     * @param exception the exception.
+     * @return the error.
      */
     @ExceptionHandler
     public ResponseEntity<ApiExceptionResponse> handleUnknownEntityException(UnknownEntityException exception) {
@@ -62,14 +62,32 @@ public class ControllerAdvice {
         );
     }
 
-    private record ApiExceptionResponse(
-            String httpStatus,
-            int httpStatusCode,
-            String message,
-            Instant timestamp
-    ) {
-        public ApiExceptionResponse(HttpStatus httpStatus, String message) {
-            this(httpStatus.name(), httpStatus.value(), message, Instant.now());
-        }
+    /**
+     * Handles invalid media type exception.
+     *
+     * @param e the exception.
+     * @return the error.
+     */
+    @ExceptionHandler
+    public ResponseEntity<ApiExceptionResponse> handleMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+        return new ResponseEntity<>(
+                new ApiExceptionResponse(HttpStatus.BAD_REQUEST, "Media type not supported"),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    /**
+     * Handles generic exceptions.
+     *
+     * @param e the exception.
+     * @return the error.
+     */
+    @ExceptionHandler
+    public ResponseEntity<ApiExceptionResponse> handleGenericException(Exception e) {
+        log.error("Unhandled Exception", e);
+        return new ResponseEntity<>(
+                new ApiExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unhandled exception"),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }

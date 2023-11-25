@@ -1,6 +1,5 @@
 package fr.agaspardcilia.homeadmin.authentication;
 
-import fr.agaspardcilia.homeadmin.authentication.exception.InvalidTokenException;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import fr.agaspardcilia.homeadmin.configuration.properties.Security;
 import fr.agaspardcilia.homeadmin.security.Authority;
@@ -17,15 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TokenProviderTest {
     @Test
-    void testCreateToken() throws InvalidTokenException {
+    void testCreateToken() {
         TokenProvider provider = new TokenProvider(props());
         UserDto user = user();
-        Authentication authentication = authentication(user.id().toString());
+        Authentication authentication = authentication(user.id().toString(), "");
 
         String token = provider.createToken(user, authentication, true);
         Authentication toTest = provider.getAuthentication(token);
+        Authentication expected = authentication(user.id().toString(), token);
 
-        assertEquals(authentication, toTest);
+        assertEquals(expected, toTest);
     }
 
     private UserDto user() {
@@ -37,8 +37,8 @@ class TokenProviderTest {
         );
     }
 
-    private Authentication authentication(String credentials) {
-        return new UsernamePasswordAuthenticationToken("foo", credentials, Set.of(new SimpleGrantedAuthority(Authority.USER.name())));
+    private Authentication authentication(String uuid, String token) {
+        return new UsernamePasswordAuthenticationToken(uuid, token, Set.of(new SimpleGrantedAuthority(Authority.USER.name())));
     }
 
     private AppProperties props() {

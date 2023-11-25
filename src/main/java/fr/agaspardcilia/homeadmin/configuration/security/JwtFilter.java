@@ -1,7 +1,6 @@
 package fr.agaspardcilia.homeadmin.configuration.security;
 
 import fr.agaspardcilia.homeadmin.authentication.TokenProvider;
-import fr.agaspardcilia.homeadmin.authentication.exception.InvalidTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,12 +23,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
-        if (token != null) {
-            try {
-                SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(token));
-            } catch (InvalidTokenException e) {
-                SecurityContextHolder.clearContext();
-            }
+        if (StringUtils.isNotBlank(token) && tokenProvider.validateToken(token)) {
+            SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(token));
         }
         filterChain.doFilter(request, response);
     }

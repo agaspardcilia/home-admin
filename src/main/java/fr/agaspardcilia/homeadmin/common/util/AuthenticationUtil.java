@@ -23,7 +23,7 @@ public class AuthenticationUtil {
      * @return the ID if a user is connected, {@link Optional#empty()} otherwise.
      */
     public static Optional<UUID> getCurrentUserId() {
-        String credentials = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        String credentials = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!StringUtils.isBlank(credentials)) {
             return Optional.of(UUID.fromString(credentials));
         } else {

@@ -1,6 +1,5 @@
 package fr.agaspardcilia.homeadmin.authentication;
 
-import fr.agaspardcilia.homeadmin.authentication.exception.InvalidTokenException;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import fr.agaspardcilia.homeadmin.configuration.properties.Security;
 import fr.agaspardcilia.homeadmin.configuration.security.JwtConstants;
@@ -11,8 +10,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,10 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Builds JWT tokens.
  */
+@Log4j2
 @Component
 public class TokenProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
-
     private final Duration tokenValidity;
     private final Duration tokenValidityForRememberMe;
     private final Key key;
@@ -70,7 +67,9 @@ public class TokenProvider {
                 .collect(Collectors.joining(","));
         Duration validityDuration = rememberMe ? tokenValidityForRememberMe : tokenValidity;
         Instant validity = Instant.now().plus(validityDuration);
+
         return Jwts.builder()
+                .signWith(key)
                 .setSubject(authentication.getName())
                 .claim(JwtConstants.AUTHORITIES_KEY, authorities)
                 .claim(JwtConstants.ID_KEY, user.id())
@@ -83,18 +82,29 @@ public class TokenProvider {
      *
      * @param token the token.
      * @return the authentication if the token is valid.
-     * @throws InvalidTokenException if the token is not valid.
      */
-    public Authentication getAuthentication(String token) throws InvalidTokenException {
+    public Authentication getAuthentication(String token) {
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        Set<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get(JwtConstants.AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toUnmodifiableSet());
+        return new UsernamePasswordAuthenticationToken(claims.get(JwtConstants.ID_KEY), token, authorities);
+    }
+
+    /**
+     * Validates a given JWT token signed by the server.
+     *
+     * @param token the token to validate.
+     * @return {@code true} if valid, {@code false} otherwise.
+     */
+    public boolean validateToken(String token) {
         try {
-            Claims claims = jwtParser.parseClaimsJwt(token).getBody();
-            Set<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get(JwtConstants.AUTHORITIES_KEY).toString().split(","))
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toUnmodifiableSet());
-            return new UsernamePasswordAuthenticationToken(claims.getSubject(), claims.get(JwtConstants.ID_KEY), authorities);
+            jwtParser.parseClaimsJws(token);
+            return true;
         } catch (JwtException | IllegalArgumentException e) {
-            LOGGER.trace("Invalid JWT token");
-            throw new InvalidTokenException();
+            log.info("Invalid JWT token.");
+            log.trace("Invalid JWT token trace.", e);
         }
+        return false;
     }
 }

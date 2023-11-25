@@ -26,4 +26,6 @@ app:
   action:
     runnable-dir: /Users/alexandre/home-admin
     execution-timeout: PT60S
+#logging:
+#  level:
 

@@ -1,6 +1,7 @@
 package fr.agaspardcilia.homeadmin.configuration.security;
 
 import fr.agaspardcilia.homeadmin.authentication.TokenProvider;
+import fr.agaspardcilia.homeadmin.configuration.FilterConfigurer;
 import fr.agaspardcilia.homeadmin.security.Authority;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,30 +34,41 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.apply(new JwtConfigurer(tokenProvider));
+        httpSecurity.apply(new FilterConfigurer(tokenProvider));
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers(e -> e.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(e -> e
-                        .requestMatchers("/authenticate").permitAll()
-                        .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/users/password").permitAll()
-                        .requestMatchers("/users/activate/*").permitAll()
-                        .requestMatchers("/users/forgotten/*").permitAll()
-                        .requestMatchers("/users/reset").permitAll()
-                        .requestMatchers("/users/current").permitAll()
-                        .requestMatchers("/articles/available").permitAll()
-                        .requestMatchers("/articles/category/*").permitAll()
-                        .requestMatchers("/users/**").hasAnyAuthority(Authority.ADMIN.name())
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/static/**",
+                                "/*.ico",
+                                "/*.json",
+                                "/*.png",
+                                "/resources/**"
+                        ).permitAll()
+                        .requestMatchers("/api/authenticate").permitAll()
+                        .requestMatchers("/api/users/register").permitAll()
+                        .requestMatchers("/api/users/password").permitAll()
+                        .requestMatchers("/api/users/activate/*").permitAll()
+                        .requestMatchers("/api/users/forgotten/*").permitAll()
+                        .requestMatchers("/api/users/reset").permitAll()
+                        .requestMatchers("/api/users/current").permitAll()
+                        .requestMatchers("/api/articles/available").permitAll()
+                        .requestMatchers("/api/articles/category/*").permitAll()
+                        .requestMatchers("/api/users/**").hasAnyAuthority(Authority.ADMIN.name())
                         .anyRequest().authenticated()
                 ).build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(HttpMethod.OPTIONS, "/**");
+        return web -> web
+                .ignoring()
+                .requestMatchers(HttpMethod.OPTIONS, "/**");
     }
 
     @Bean
