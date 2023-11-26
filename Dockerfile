@@ -14,8 +14,16 @@ ARG JAR_FILE
 
 COPY ${JAR_FILE} app.jar
 
-EXPOSE 8080 5432
+EXPOSE 8080 5432 5005
 VOLUME /tmp /configuration /script
 ENV PROFILE=prod
 
-ENTRYPOINT ["java","-jar","-Dspring.config.additional-location=file:/configuration/","-Dspring.profiles.active=${PROFILE}","/app.jar"]
+ENTRYPOINT [ \
+    "java", \
+    "-Xdebug", \
+    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", \
+    "-jar", \
+    "-Dspring.config.additional-location=file:/configuration/", \
+    "-Dspring.profiles.active=${PROFILE}", \
+    "/app.jar" \
+]

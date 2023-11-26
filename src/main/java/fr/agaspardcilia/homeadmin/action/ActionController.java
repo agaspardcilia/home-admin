@@ -10,6 +10,7 @@ import fr.agaspardcilia.homeadmin.common.exception.UnknownEntityException;
 import fr.agaspardcilia.homeadmin.common.exception.api.ApiBadRequestException;
 import fr.agaspardcilia.homeadmin.common.exception.api.ApiInternalServerErrorException;
 import fr.agaspardcilia.homeadmin.security.Permission;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,10 @@ public class ActionController {
 
     @PermissionRequired(Permission.ACTIONS_RENAME)
     @PostMapping("/rename/{id}")
-    public ActionDto rename(@PathVariable UUID id, String newName) throws UnknownEntityException {
+    public ActionDto rename(
+            @PathVariable UUID id,
+            @Pattern(message = "Alphanumeric only", regexp = "\\w+") String newName
+    ) throws UnknownEntityException {
         try {
             return service.renameAction(id, newName);
         } catch (DuplicatedActionException e) {

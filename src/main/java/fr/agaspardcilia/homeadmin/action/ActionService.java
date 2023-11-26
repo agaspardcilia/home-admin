@@ -8,7 +8,6 @@ import fr.agaspardcilia.homeadmin.action.exception.UnableToAccessPathException;
 import fr.agaspardcilia.homeadmin.common.exception.UnknownEntityException;
 import fr.agaspardcilia.homeadmin.configuration.properties.AppProperties;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Pattern;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -44,11 +43,12 @@ public class ActionService {
         this.runnableDir = Path.of(properties.getAction().getRunnableDir());
         this.timeout = properties.getAction().getExecutionTimeout();
 
-
         Preconditions.checkArgument(
                 runnableDir.toFile().exists() && runnableDir.toFile().isDirectory(),
                 "runnableDir is not a valid directory"
         );
+
+        log.info("Runnable directory: {}", runnableDir.toAbsolutePath().toString());
     }
 
 
@@ -59,13 +59,17 @@ public class ActionService {
      */
     @Transactional
     public Set<ActionDto> scanRunnableDirectory() throws UnableToAccessPathException {
+        log.info("Scanning runnable directory");
         try {
             // All entries in database.
             Map<String, Action> actionsByRunnableName = repository.findAll().stream()
                     .collect(Collectors.toMap(Action::getRunnableFileName, e -> e));
 
             // Fetch existing DB entry or create empty ones for newly found runnable.
-            Map<String, Action> toSave = findAllInRunnableDir().stream()
+            Set<String> allInRunnableDir = findAllInRunnableDir();
+            log.info("Found in runnable dir: {}", allInRunnableDir);
+
+            Map<String, Action> toSave = allInRunnableDir.stream()
                     .map(r -> actionsByRunnableName.getOrDefault(r, ActionFactory.getAction(r)))
                     .collect(Collectors.toMap(Action::getName, e -> e));
 
@@ -101,9 +105,7 @@ public class ActionService {
      * @param name the new name of the action.
      * @return the updated action.
      */
-    public ActionDto renameAction(UUID id,
-                                  @Pattern(message = "Alphanumeric only", regexp = "\\w+") String name
-    ) throws UnknownEntityException, DuplicatedActionException {
+    public ActionDto renameAction(UUID id, String name) throws UnknownEntityException, DuplicatedActionException {
         Action action = getEntity(id);
         if (repository.existsByIdNotAndName(action.getId(), name)) {
             throw new DuplicatedActionException("Name already in use by another action");

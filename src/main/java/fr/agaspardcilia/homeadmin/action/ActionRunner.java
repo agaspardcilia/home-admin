@@ -3,6 +3,8 @@ package fr.agaspardcilia.homeadmin.action;
 import com.google.common.base.Preconditions;
 import fr.agaspardcilia.homeadmin.action.dto.ActionExecutionDto;
 import fr.agaspardcilia.homeadmin.action.dto.ActionExecutionOutcome;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 
@@ -10,6 +12,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,9 +48,11 @@ public class ActionRunner {
      */
     public ActionExecutionDto run() {
         try {
-            log.debug("Running {}", runnable);
+            Interpreter interpreter = getInterpreter();
+            log.info("Running {} with {}", runnable, interpreter.getInterpreter());
+
             Process process = new ProcessBuilder()
-                    .command(getExecutable().toFile().getAbsolutePath())
+                    .command(List.of(interpreter.getInterpreter(), getExecutable().toFile().getAbsolutePath()))
                     .start();
 
             boolean hasNotTimedOut = process.waitFor(timeout.getSeconds(), TimeUnit.SECONDS);
@@ -77,5 +83,22 @@ public class ActionRunner {
 
     private Path getExecutable() {
         return runnableDir.resolve(runnable);
+    }
+
+    private Interpreter getInterpreter() {
+        return Arrays.stream(Interpreter.values())
+                .filter(e -> runnable.endsWith(e.extension))
+                .findFirst()
+                .orElse(Interpreter.SH);
+    }
+
+    @AllArgsConstructor
+    @Getter
+    private enum Interpreter {
+        SH(".sh", "sh"),
+        PYTHON(".py", "python3");
+
+        private final String extension;
+        private final String interpreter;
     }
 }

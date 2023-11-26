@@ -28,4 +28,7 @@ app:
     execution-timeout: PT60S
 #logging:
 #  level:
-
+#logging:
+#  file:
+#    name: app.log
+#    path: /Users/alexandre/repos/home-admin

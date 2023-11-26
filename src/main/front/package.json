@@ -22,7 +22,7 @@
     "zustand": "4.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start REACT_APP_ENVIRONMENT='development'",
     "start-prod": "react-scripts start REACT_APP_ENVIRONMENT='production'",
     "build": "react-scripts build REACT_APP_ENVIRONMENT='production'",
     "test": "react-scripts test",
